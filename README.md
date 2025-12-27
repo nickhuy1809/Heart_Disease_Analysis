@@ -90,7 +90,13 @@ pip install -r requirements.txt
 ## 8. How to Run
 
 1. **Clone the repository** (or download the notebooks).
-2. **Install Dependencies**: Run the `pip install -r requirements.txt` command.
+``` bash
+git clone https://github.com/nickhuy1809/Heart_Disease_Analysis.git 
+```
+2. **Install Dependencies**: Run the command:
+```bash
+pip install -r requirements.txt
+```
 3. **Run `Data_Explore.ipynb`**:
     * Remember to run cell `5` (run the libraries) and cell `13` (download from **kaggleAPI**) so that this notebook will automatically download the dataset from Kaggle into a folder named `./my_heart_disease_data`.
     * It performs initial cleaning and exploration.
