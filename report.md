@@ -1,4 +1,3 @@
-Here is the detailed project report based on the provided analysis, methodology, and findings.
 # Heart Disease Risk Analysis: CDC BRFSS 2022 Report
 
 ## 1. Executive Summary
@@ -19,12 +18,9 @@ The analysis utilizes `heart_2022_with_nans.csv`, comprising approximately **445
 
 ## 2. Team & Responsibilities
 
-| Member | Role | Key Responsibilities |
-| --- | --- | --- |
-| **Nguyễn Hữu Anh Trí** | **EDA & Modeling (Q2, Q4)** | Analyzed numeric/categorical columns, investigated multimorbidity (Question 2), and built supervised risk prediction models (Question 4). |
-| **Cao Tấn Hoàng Huy** | **Data Engineering & Modeling (Q1, Q3)** | Handled missing values and outliers, designed noise reduction strategies, investigated the Mind–Body connection (Question 1), and performed patient clustering (Question 3). |
-
----
+| Member| Role| Key Responsibilities| Percentage|
+| Nguyễn Hữu Anh Trí | EDA & Modeling (Q2, Q4)  | Analyzed numeric/categorical columns, investigated multimorbidity (Question 2), and built supervised risk prediction models (Question 4). | 100% |
+| Cao Tấn Hoàng Huy  | Data Engineering & Modeling (Q1, Q3) | Handled missing values and outliers, designed noise reduction strategies, investigated the Mind–Body connection (Question 1), and performed patient clustering (Question 3). | 100% |
 
 ## 3. Data Overview & Preprocessing (Huy)
 
@@ -196,20 +192,19 @@ Based on the workflow evident in the project files, here is the **Collaboration 
 
 The team adopted an agile, iterative data science pipeline to ensure efficiency and reproducibility. The collaboration was structured into three distinct phases:
 
-### **Phase 1: Foundation & Pipeline Design (Parallel Execution)**
+### **Phase 1: Foundation & Pipeline Design (Parallel Execution)** (30/11/2025 - 6/12/2025)
 
 * **Role Division:** The team leveraged individual strengths to parallelize the initial workload.
 * **Huy** took ownership of the **Data Engineering** pipeline, focusing on the complex cleaning strategy required for the "With NaNs" dataset. This involved researching and implementing MICE imputation to ensure the data was model-ready.
 * **Trí** simultaneously initiated the **Exploratory Data Analysis (EDA)**, creating the statistical framework to understand the feature distributions (e.g., identifying the "BMI Triangle" relationship) and defining the hypothesis questions.
 
 
-
-### **Phase 2: Integration & Hand-off**
+### **Phase 2: Integration & Hand-off** (7/12/2025 - 13/12/2025)
 
 * **The "Cleaned Data" Handshake:** A critical collaboration point was the generation of the intermediate file `cleaned_heart_data.csv`. Huy’s cleaning script processed the raw CDC data, which was then validated and handed off to Trí. This ensured that both members were modeling on a unified, high-quality dataset, preventing consistency errors.
 * **Code Review:** The team conducted cross-checks on critical decisions, such as the choice to remove duplicate rows (validated by the high dimensionality argument) and the decision to cap outliers rather than drop them.
 
-### **Phase 3: Modeling & Synthesis**
+### **Phase 3: Modeling & Synthesis** (14/12/2025 - 20/12/2025)
 
 * **Modular Modeling:** To answer the four core research questions efficiently, the modeling tasks were modularized:
 * Huy focused on **Unsupervised Learning** (Clustering/Patient Profiling) and the "Mind-Body" interaction (Q1).
@@ -218,9 +213,14 @@ The team adopted an agile, iterative data science pipeline to ensure efficiency 
 
 * **Insight Synthesis:** Final insights were synthesized by comparing results. For instance, Trí’s finding that "BMI is a weak predictor" was contextualized by Huy’s cluster analysis, which found a "High Risk" cluster that was not necessarily obese, leading to the unified conclusion that *lifestyle factors often outweigh simple biometrics*.
 
+
+### **Phase 4: Refine reports and markdowns analysis** (21/12/2025 - 27/12/2025)
+* Both re-check the analysis and finish reports, readme files for the projects.
+
 ### **Tools & Technologies**
 
 * **Version Control & Sharing:** The project utilized **Jupyter Notebooks** for code development, with regular synchronization to merge the *Exploration* and *Modeling* modules.
 * **Python Stack:** The team standardized on a shared library stack (`pandas`, `scikit-learn`, `matplotlib`, `seaborn`) to ensure code compatibility and reproducibility across different machines.
+
 
 ---
