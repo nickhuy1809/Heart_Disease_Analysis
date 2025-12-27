@@ -90,6 +90,7 @@ pip install -r requirements.txt
 3. **Run `Data_Explore.ipynb**`:
 * This notebook will automatically download the dataset from Kaggle into a folder named `./my_heart_disease_data`.
 * It performs initial cleaning and exploration.
+* After that, it will create a new dataset named `cleaned_heart_data.csv`
 
 
 4. **Run `Data_modeling.ipynb**`:
