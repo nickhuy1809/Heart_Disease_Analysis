@@ -1,6 +1,6 @@
 # Heart Disease Risk Analysis: CDC BRFSS 2022 Report
 
-## 1. Executive Summary
+## 1. Executive summary
 
 **Objective:**
 This project analyzes personal health indicators from the 2022 CDC BRFSS dataset to identify key risk factors for heart disease. The primary goals were to quantify the effects of multimorbidity, segment the population into meaningful risk profiles, and build interpretable machine learning models to predict heart attacks (`HadHeartAttack`).
@@ -8,191 +8,179 @@ This project analyzes personal health indicators from the 2022 CDC BRFSS dataset
 **Dataset:**
 The analysis utilizes `heart_2022_with_nans.csv`, comprising approximately **445,000 rows** and **40 features**. Unlike pre-cleaned datasets, this version preserves missing values (approximately 44% of rows contain missing data), necessitating a robust handling strategy to avoid bias.
 
-**Core Outcomes:**
-
-* **Identification of "Silent" Risks:** 8.4% of heart attack patients presented with zero prior chronic conditions.
-* **The "Buffer" Effect:** Physical activity significantly mitigates the cardiovascular risks associated with poor sleep and mental distress.
-* **Critical Comorbidity Window:** Patients with exactly two chronic conditions represent the highest volume risk group (~24% of cases).
+**Core outcomes:**
+* **Identification of "Silent" risks:** 8.4% of heart attack patients presented with zero prior chronic conditions.
+* **The "Buffer" effect:** Physical activity significantly mitigates the cardiovascular risks associated with poor sleep and mental distress.
+* **Critical comorbidity window:** Patients with exactly two chronic conditions represent the highest volume risk group (~24% of cases).
 
 ---
 
 ## 2. Team & Responsibilities
 
-| Member| Role| Key Responsibilities| Percentage|
-| Nguyễn Hữu Anh Trí | EDA & Modeling (Q2, Q4)  | Analyzed numeric/categorical columns, investigated multimorbidity (Question 2), and built supervised risk prediction models (Question 4). | 100% |
-| Cao Tấn Hoàng Huy  | Data Engineering & Modeling (Q1, Q3) | Handled missing values and outliers, designed noise reduction strategies, investigated the Mind–Body connection (Question 1), and performed patient clustering (Question 3). | 100% |
+| Member| Key responsibilities| Percentage|
+|-------|---------------------|-----------|
+| Nguyễn Hữu Anh Trí | Analyzing numeric/categorical columns| 100% |
+| Nguyễn Hữu Anh Trí | Investigating multimorbidity (Question 2)| 100% |
+| Nguyễn Hữu Anh Trí | Building supervised risk prediction models (Question 4). | 100% |
+| Cao Tấn Hoàng Huy  | Handling missing values and outliers | 100% |
+| Cao Tấn Hoàng Huy  | Investigating the Mind–Body connection (Question 1) | 100% |
+| Cao Tấn Hoàng Huy  | Performing patient clustering (Question 3). | 100% |
 
-## 3. Data Overview & Preprocessing (Huy)
+## 3. Data overview & preprocessing 
 
-### 3.1 Data Dictionary & Structure
+### 3.1 Data dictionary & structure
 The dataset consists of 40 columns, categorized into 7 distinct groups based on the nature of the indicators. The primary target variable for modeling is HadHeartAttack.
 
-#### Group 1: Demographics & Basic Info
-Key identifiers including `State`, `Sex` and `AgeCategory`.
+#### Group 1: Demographics & Basic information
+* Key identifiers including `State`, `Sex` and `AgeCategory`.
 
-`RaceEthnicityCategory` is used to analyze disparities across demographic groups.
+* `RaceEthnicityCategory` is used to analyze disparities across demographic groups.
 
-#### Group 2: Related Heart Conditions (Target & History)
+#### Group 2: Related Heart conditions (Target & History)
 
-`HadHeartAttack` (Target): Binary outcome indicating if the respondent ever had a heart attack.
+* `HadHeartAttack` (Target): Binary outcome indicating if the respondent ever had a heart attack.
 
-Includes related cardiovascular history: `HadAngina` (chest pain) and `HadStroke`.
+* Includes related cardiovascular history: `HadAngina` (chest pain) and `HadStroke`.
 
-#### Group 3: Physical Health Metrics
+#### Group 3: Physical health metrics
 
-General status: `GeneralHealth`, `PhysicalHealthDays` and `MentalHealthDays`.
+* General status: `GeneralHealth`, `PhysicalHealthDays` and `MentalHealthDays`.
 
-Biometrics: `HeightInMeters` and `WeightInKilograms`, which are used to derive `BMI` (Body Mass Index).
+* Biometrics: `HeightInMeters` and `WeightInKilograms`, which are used to derive `BMI` (Body Mass Index).
 
-#### Group 4: Chronic Conditions (Comorbidities)
+#### Group 4: Chronic conditions (Comorbidities)
 
-Includes major risk multipliers: `HadDiabetes`, `HadKidneyDisease`, `HadCOPD`, `HadAsthma`, `HadArthritis`, `HadDepressiveDisorder` and `HadSkinCancer`.
+* Includes major risk multipliers: `HadDiabetes`, `HadKidneyDisease`, `HadCOPD`, `HadAsthma`, `HadArthritis`, `HadDepressiveDisorder` and `HadSkinCancer`.
 
 #### Group 5: Disabilities & Limitations
 
-Sensory issues: `DeafOrHardOfHearing`, `BlindOrVisionDifficulty`.
+* Sensory issues: `DeafOrHardOfHearing`, `BlindOrVisionDifficulty`.
 
-Functional limitations: `DifficultyWalking`, `DifficultyConcentrating`, `DifficultyDressingBathing`, and `DifficultyErrands`.
+* Functional limitations: `DifficultyWalking`, `DifficultyConcentrating`, `DifficultyDressingBathing`, and `DifficultyErrands`.
 
 #### Group 6: Lifestyle & Behaviors
 
-Substance use: `SmokerStatus`, `ECigaretteUsage` and `AlcoholDrinkers`.
+* Substance use: `SmokerStatus`, `ECigaretteUsage` and `AlcoholDrinkers`.
 
-Habits: `PhysicalActivities` and `SleepHour`s.
+* Habits: `PhysicalActivities` and `SleepHour`s.
 
 ####  Group 7: Healthcare & Prevention
 
-Access and history: `LastCheckupTime`, `ChestScan`, `RemovedTeeth`.
+* Access and history: `LastCheckupTime`, `ChestScan`, `RemovedTeeth`.
 
-Vaccinations & Recent Risks: `FluVaxLast12`, `PneumoVaxEver`, `TetanusLast10Tdap`, `CovidPos`, `HighRiskLastYear` and `HIVTesting`.
-
-Here is the rewritten **Missing Values Handling Strategy** section, incorporating your specific mathematical recovery plan and the justification for Tree-Based MICE.
+* Vaccinations & Recent Risks: `FluVaxLast12`, `PneumoVaxEver`, `TetanusLast10Tdap`, `CovidPos`, `HighRiskLastYear` and `HIVTesting`.
 
 ---
 
-### 3.2 Missing Value Handling Strategy
+### 3.2 Missing value handling strategy
 
 A robust, multi-stage strategy was designed to handle missing data, prioritizing the preservation of physiological relationships over simple deletion.
 
-#### **Step 1: Strategic Feature Retention (The BMI Triangle)**
+#### **Step 1: Strategic feature retention (The BMI Triangle)**
 
 Unlike standard cleaning pipelines that might drop redundant columns immediately, we **temporarily retained** `WeightInKilograms` and `HeightInMeters` alongside `BMI`.
 
 * **Rationale:** These three variables are mathematically linked. By keeping all three, we can mathematically recover missing values with 100% accuracy if the other two are present, before resorting to statistical imputation.
-* **Recovery Logic:**
-* *If BMI is missing:*  $$BMI = \frac{Weight}{Height^2}$$
 
-* *If Weight is missing:* $$Weight = BMI \times Height^2$$
-
-* *If Height is missing:* $$Height = \sqrt{\frac{Weight}{BMI}}$$
-
-
-#### **Step 2: Dropping Non-Essential Features**
+#### **Step 2: Dropping non-essential features**
 
 Columns identified in the initial audit as low-value were dropped **unless** they were part of the BMI triangle above.
 
 * **Justification:** Features unrelated to cardiovascular health or those with excessive missingness (high missing-correlation ratio ~18%) were removed to reduce noise. This ensures the model focuses only on variables with proven clinical or predictive relevance.
 
-#### **Step 3: Tree-Based MICE Imputation**
+#### **Step 3: Tree-Based MICE imputation**
 
 For the remaining missing values that could not be mathematically recovered, we applied **Multivariate Imputation by Chained Equations (MICE)** using a **Tree-Based approach** (ExtraTrees Regressor) rather than standard Linear Regression.
 
 * **Why Tree-Based?**
 Medical data is rarely linear; it is often clustered and threshold-based. A linear model assumes a straight-line relationship (e.g., "as age increases, risk increases constantly"), which fails to capture complex interactions.
-* **Clinical Advantage:**
+* **Clinical advantage:**
 Tree-based models naturally capture non-linear, logical rules inherent in health data.
 * *Example:* A linear imputer might average risk factors. A tree-based imputer can learn specific rules like: *"If Age > 60 AND Smoker = Yes, then ChestScan is likely Yes,"* providing a much more realistic imputation for complex patient profiles.
 --- 
 
-### 3.3 **Outlier Management (Winsorization):**
+### 3.3 **Outlier management (Winsorization):**
 To reduce noise while retaining data, extreme outliers were capped based on domain knowledge:
 * `MentalHealthDays`: Capped at 30 days.
 * `SleepHours`: Capped at 0.5 – 18 hours.
 * `BMI`: Capped at 15 – 60.
 
 
-**Abnormal Insight Handling:**
+**Abnormal insight handling:**
 Anomalies such as "Normal Weight" heart attacks or younger patients with high chronic disease rates were cross-verified. Inconsistent survey responses (e.g., Age mismatches) led to targeted row exclusion if unresolvable.
 
 ---
 
-## 4. Exploratory Data Analysis (Trí)
+## 4. Exploratory data analysis
 
-### 4.1 Numeric Analysis
+### 4.1 Numeric analysis
 
 * **Distribution:** `BMI` and `MentalHealthDays` showed significant right-skewness. A log-transformation was applied for linear modeling, while tree-based models used the raw (Winsorized) data.
 * **Correlations:** `GeneralHealth`, `PhysicalHealthDays`, and `AgeCategory` showed the strongest correlation with `HadHeartAttack`. Interestingly, `BMI` showed limited standalone predictive power, suggesting it must be interpreted alongside Age and Sex.
 
-### 4.2 Categorical Analysis
+### 4.2 Categorical analysis
 
-* **Race & Demographics:** Prevalence rates were calculated across racial groups. Preliminary analysis suggests disparities in heart disease prevalence, often compounded by socioeconomic factors implicit in the `State` data.
+* **Race & demographics:** Prevalence rates were calculated across racial groups. Preliminary analysis suggests disparities in heart disease prevalence, often compounded by socioeconomic factors implicit in the `State` data.
 * **Simplification:** Granular categories for `SmokerStatus` and `HadDiabetes` (e.g., "Pre-diabetes") were grouped into binary flags to reduce noise and improve model stability.
 
 ---
 
-## 5. Modeling & Key Findings
+## 5. Modeling & Key findings
 
-### Question 1: The Mind–Body Connection (Huy)
+### Question 1: The Mind–Body connection
 
 *Hypothesis: Poor mental health and abnormal sleep increase heart risk, but physical activity can mitigate this.*
 
 * **Findings:**
-* **U-Shaped Sleep Curve:** Both sleep deprivation (<6 hours) and oversleeping (>9 hours) are associated with higher heart attack risk.
+* **U-Shaped sleep curve:** Both sleep deprivation (<6 hours) and oversleeping (>9 hours) are associated with higher heart attack risk.
 * **Synergy:** High `MentalHealthDays` (distress) combined with poor sleep creates a compounding risk effect.
-* **The Protective Buffer:** Interaction terms revealed that **Physical Activity** acts as a moderator. Active individuals with poor sleep/mental health showed significantly lower risk compared to inactive individuals with the same stress levels.
+* **The protective buffer:** Interaction terms revealed that **Physical activity** acts as a moderator. Active individuals with poor sleep/mental health showed significantly lower risk compared to inactive individuals with the same stress levels.
 
 
-### Question 2: Compounding Multimorbidity (Trí)
+### Question 2: Compounding multimorbidity 
 
 *Question: How does the accumulation of chronic conditions affect risk?*
 
-* **Method:** A **Comorbidity Score (0–3+)** was calculated by summing chronic conditions (Diabetes, Kidney Disease, COPD, etc.).
+* **Method:** A **Comorbidity score (0–3+)** was calculated by summing chronic conditions (Diabetes, Kidney Disease, COPD, etc.).
 * **Key Statistics:**
-* **Score 0 (The Silent Threat):** **8.4%** of heart attack sufferers had zero other chronic conditions, highlighting the need for screening beyond just "sick" patients.
-* **Score 2 (The Trap):** This group accounted for **~24%** of cases, representing the highest volume risk segment.
+* **Score 0 (The silent threat):** **8.4%** of heart attack sufferers had zero other chronic conditions, highlighting the need for screening beyond just "sick" patients.
+* **Score 2 (The trap):** This group accounted for **~24%** of cases, representing the highest volume risk segment.
 
 
-* **Age Interaction:** The relative risk of multimorbidity is higher in younger age groups. While older adults have higher absolute risk, a young person with 2+ conditions faces a drastically higher odds ratio compared to their healthy peers.
+* **Age interaction:** The relative risk of multimorbidity is higher in younger age groups. While older adults have higher absolute risk, a young person with 2+ conditions faces a drastically higher odds ratio compared to their healthy peers.
 
-### Question 3: Patient Profiling & Clustering (Huy)
+### Question 3: Patient profiling & clustering
 
 *Goal: Identify distinct patient archetypes using Unsupervised Learning.*
 
 * **Method:** K-Prototypes (for mixed numeric/categorical data) was used to cluster the population.
-* **Identified Profiles:**
-1. **The "Older Multimorbid":** High age, multiple chronic conditions, sedentary. (Highest Risk).
-2. **The "Young High-Stress":** Younger demographic, physically capable, but high `MentalHealthDays` and poor sleep habits.
-3. **The "Lifestyle Risk":** Smokers and heavy drinkers who are otherwise "normal" weight and mobile.
+* **Identified profiles:**
+    1. **The "Older Multimorbid":** High age, multiple chronic conditions, sedentary. (Highest Risk).
+    2. **The "Young high-stress":** Younger demographic, physically capable, but high `MentalHealthDays` and poor sleep habits.
+    3. **The "Lifestyle risk":** Smokers and heavy drinkers who are otherwise "normal" weight and mobile.
 
+* **Abnormal insight:** The "Lifestyle Risk" cluster proves that physical capability does not equal heart health; addiction plays a major role even in the absence of obesity.
 
-* **Abnormal Insight:** The "Lifestyle Risk" cluster proves that physical capability does not equal heart health; addiction plays a major role even in the absence of obesity.
-
-### Question 4: Risk Prediction (Trí)
+### Question 4: Risk prediction
 
 *Objective: Build an interpretable model to predict heart attacks.*
 
 * **Models:**
-* **Logistic Regression (ElasticNet):** Prioritized for interpretability.
-* **Random Forest:** Prioritized for high performance and capturing non-linear interactions.
+    * **Logistic Regression (ElasticNet):** Prioritized for interpretability.
+    * **Random Forest:** Prioritized for high performance and capturing non-linear interactions.
+    * **K-Nearest Neighbors**: Try to predict mainly base on dataset
 
-
-* **Performance Strategy:**
-* Given the class imbalance, **Recall (Sensitivity)** was the primary metric. It is clinically safer to flag a false positive than to miss a potential heart attack.
+* **Performance strategy:**
+    * Given the class imbalance, **Recall (Sensitivity)** was the primary metric. It is clinically safer to flag a false positive than to miss a potential heart attack.
 * **Feature Importance:** `AgeCategory`, `GeneralHealth`, and the custom `MultimorbidityScore` consistently ranked as top predictors. `BMI` was less predictive than expected.
 
-
-* **SHAP Analysis:** SHAP values confirmed that `PhysicalActivity` and `MentalHealth` provide significant "push" and "pull" factors for individual risk scores.
-
----
-Based on the workflow evident in the project files, here is the **Collaboration Process Description** formatted for your report. You can place this section after "Team & Responsibilities".
-
 ---
 
-## **6. Collaboration Process & Workflow**
+## **6. Collaboration process & Workflow**
 
 The team adopted an agile, iterative data science pipeline to ensure efficiency and reproducibility. The collaboration was structured into three distinct phases:
 
-### **Phase 1: Foundation & Pipeline Design (Parallel Execution)** (30/11/2025 - 6/12/2025)
+### **Phase 1: Foundation & Pipeline design (Parallel execution)** (30/11/2025 - 6/12/2025)
 
 * **Role Division:** The team leveraged individual strengths to parallelize the initial workload.
 * **Huy** took ownership of the **Data Engineering** pipeline, focusing on the complex cleaning strategy required for the "With NaNs" dataset. This involved researching and implementing MICE imputation to ensure the data was model-ready.
